@@ -1,0 +1,99 @@
+    <!--<div class="container-fluid custom-height-scroll">-->
+        <a class="btn  btn-lg " href="/"><i class="bi bi-arrow-left-square"></i></a>
+        <div class="row  justify-content-center row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 ">
+            {% if users_matched  %}
+                {% for user in users %}
+                    <!-- Show only those users which don't have any admin access neither current logged in user-->
+                    {% if not user.is_superuser and user.id != request.user.id %}
+                                <div class="col mt-4">
+                                    <form id="friendform" method="post">
+                                        {% csrf_token %}
+                                        <div id="{{user.username}}" class="card">
+                                            <img src="https://www.gravatar.com/avatar/?d=mp&s=80x80" class="card-img-top-custom" alt="Sharon Lessman" >
+                                            <!--<img src="..." class="card-img-top" alt="...">-->
+                                                <div class="card-body people-card">
+                                                    <h5 class="card-title text-center">{{user.first_name}} {{user.last_name}}</h5>
+                                                    <!--Check if current logged in user have any friends -->
+                                                    {% if users_in_friends %}
+                                                        <!--<p>Current user Have some friends already</p>-->
+                                                        {% for user_in_friend in users_in_friends %}
+                                                            <!-- if users is a friend of current logged in user-->
+                                                            {% if user_in_friend.id == user.id  %}
+                                                                <div class="d-grid gap-2 col-6 mx-auto">    
+                                                                    <button id="un_friend_{{user.username}}" type="submit" data-action="un-friend"  data-receiver-name="{{user.username}}" data-sender-name="{{request.user.username}}"  class="btn cancelfriend btn-secondary">Unfriend</button>
+                                                                </div>
+                                                            {% else %}
+                                                                <!--  if logged in user have some friend but check those who are not friend and whom friend request already send -->
+                                                                {% if friendrequests %}
+                                                                    {% for friendrequest in friendrequests %}
+                                                                        {% if friendrequest.receiver.id == user.id and friendrequest.sender.id == request.user.id and friendrequest.status %}
+                                                                            <div class="d-grid gap-2 col-6 mx-auto">    
+                                                                                <button id="cancel_friend_{{user.username}}" type="submit" data-action="cancel-friend-request"  data-receiver-name="{{user.username}}" data-sender-name="{{request.user.username}}"  class="btn cancelfriend btn-secondary">Cancel Request</button>
+                                                                            </div>
+                                                                        {% else %}
+                                                                            <div class="flex text-center">
+                                                                                <button id="add_friend_{{user.username}}" type="submit"  data-action="add-friend"  data-receiver-name="{{user.username}}" data-sender-name="{{request.user.username}}" class="btn addfriend btn-primary btn-sm">Add Friend</button>
+                                                                                <button id="remove_friend_{{user.username}}" type="submit" data-action="remove-friend"  data-receiver-name="{{user.username}}" data-sender-name="{{request.user.username}}"  class="btn removefriend btn-secondary btn-sm">Remove</button>        
+                                                                            </div>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% else %}
+                                                                    <div class="flex text-center">
+                                                                        <button id="add_friend_{{user.username}}" type="submit"  data-action="add-friend"  data-receiver-name="{{user.username}}" data-sender-name="{{request.user.username}}" class="btn addfriend btn-primary btn-sm">Add Friend</button>
+                                                                        <button id="remove_friend_{{user.username}}" type="submit" data-action="remove-friend"  data-receiver-name="{{user.username}}" data-sender-name="{{request.user.username}}"  class="btn removefriend btn-secondary btn-sm">Remove</button>        
+                                                                    </div>
+                                                                            
+                                                                {% endif %}
+
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        
+                                                    {% else %}
+                                                        <!--Check if current logged in user send any friend request to the users-->
+                                                        {% if friendrequests %}
+                                                                <!-- when current logged in user don't have any friends but send friends request to users-->
+                                                                {% for friendrequest in friendrequests %}
+                                                                    {% if friendrequest.receiver.id == user.id and friendrequest.sender.id == request.user.id  and friendrequest.status %}
+                                                                        <div class="d-grid gap-2 col-6 mx-auto">    
+                                                                            <button id="cancel_friend_{{user.username}}" type="submit" data-action="cancel-friend-request"  data-receiver-name="{{user.username}}" data-sender-name="{{request.user.username}}"  class="btn cancelfriend btn-secondary">Cancel Request</button>
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <!--show send request button-->
+                                                                        <div class="flex text-center">
+                                                                            <button id="add_friend_{{user.username}}" type="submit"  data-action="add-friend"  data-receiver-name="{{user.username}}" data-sender-name="{{request.user.username}}" class="btn addfriend btn-primary btn-sm">Add Friend</button>
+                                                                            <button id="remove_friend_{{user.username}}" type="submit" data-action="remove-friend"  data-receiver-name="{{user.username}}" data-sender-name="{{request.user.username}}"  class="btn removefriend btn-secondary btn-sm">Remove</button>        
+                                                                        </div>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                        <!--else show friend request button for the user-->
+                                                        {% else %}
+                                                            <!--Shows when current logged in user don't have sent any friendrequest</h1>-->
+                                                            <div class="flex text-center">
+                                                                <button id="add_friend_{{user.username}}" type="submit"  data-action="add-friend"  data-receiver-name="{{user.username}}" data-sender-name="{{request.user.username}}" class="btn addfriend btn-primary btn-sm">Add Friend</button>
+                                                                <button id="remove_friend_{{user.username}}" type="submit" data-action="remove-friend"  data-receiver-name="{{user.username}}" data-sender-name="{{request.user.username}}"  class="btn removefriend btn-secondary btn-sm">Remove</button>        
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    
+                                                </div>
+                                        </div>
+                                    </form>
+                                </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p class="text-center">No Result Found!</p>
+            {% endif %}
+        </div>
+        
+    <!--</div>-->
+    
+    
+    
+    
+    
+        
+    
+    
+
+    

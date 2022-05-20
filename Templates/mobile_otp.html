@@ -1,0 +1,203 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block verifycss %}
+    <style>
+
+        .card {
+            width: 350px;
+            padding: 10px;
+            border-radius: 20px;
+            background: #fff;
+            border: none;
+            height: 350px;
+            position: relative
+        }
+
+        .container {
+            height: 100vh
+        }
+
+        body {
+            background: #eee
+        }
+        .mobile-text {
+        color: #989696b8;
+        font-size: 15px
+        }
+
+        .form-control {
+            margin-right: 12px
+        }
+
+        .form-control:focus {
+            color: #495057;
+            background-color: #fff;
+            border-color: #ff8880;
+            outline: 0;
+            box-shadow: none
+        }
+
+        .cursor {
+            cursor: pointer
+        }
+    </style>
+{% endblock %}
+
+{% block verify %}
+    <div class="d-flex justify-content-center align-items-center container">
+        <div class="card py-5 px-3">
+            <form method="POST" class="digit-group" data-group-name="digits" data-autosubmit="true" autocomplete="off">
+                {% csrf_token %}
+                <input type="hidden" id="session_id" name="session_id" value={{session_id}}>
+                <input type="hidden" id="mobile_number" name="mobile_number" value={{mobile_number}}>
+                <h5 class="m-0">Mobile phone verification</h5><span class="mobile-text">Enter the code we just send on your mobile phone {{mobile_number}}<b class="text-danger"></b></span>
+                <div class="d-flex flex-row mt-5">
+                    <!--<input id="1" name="digit-1" type="text" class="form-control" autofocus="" data-next="#2"/><input id="2" name="digit-2" type="text" class="form-control"><input id="3" name="digit-3" type="text" class="form-control"><input id="4" name="digit-4" type="text" class="form-control"><input id="5" name="digit-5" type="text" class="form-control"><input id="6" name="digit-6" type="text" class="form-control">-->
+                    <input type="text" id="digit-1" class="form-control digit" name="digit-1" data-next="digit-2" />
+                    <input type="text" id="digit-2" class="form-control digit" name="digit-2" data-next="digit-3" data-previous="digit-1"/>
+                    <input type="text" id="digit-3" class="form-control digit" name="digit-3" data-next="digit-4" data-previous="digit-2" />
+                    <input type="text" id="digit-4" class="form-control digit" name="digit-4" data-next="digit-5" data-previous="digit-3" />
+                    <input type="text" id="digit-5" class="form-control digit" name="digit-5" data-next="digit-6" data-previous="digit-4" />
+                    <input type="text" id="digit-6" class="form-control digit" name="digit-6" data-previous="digit-5" />
+                </div>
+            </form>
+            <div id="loading" class="d-flex justify-content-center" style="display: none !important;">
+                <div class="spinner-border m-1" role="status">
+                  <span class="visually-hidden"></span>
+                </div>
+            </div>
+            <p id="error_msg"></p>
+            <div class="text-center mt-5"><span class="d-block mobile-text">Don't receive the code?</span><button id="resend-otp" type="button" class="btn btn-link font-weight-bold text-danger text-decoration-none">Resend</button></div>
+            
+        </div>
+    </div>
+{% endblock  %}
+
+
+{% block verifyjs %}
+
+    <script type="text/javascript">
+        
+        $('.digit-group').find('.digit').each(function() {
+            $(this).attr('maxlength', 1);
+            $(this).on('keyup', function(e) {
+                //console.log(e);
+                var parent = $($(this).parent());
+                //console.log(parent);
+                if(e.keyCode === 8 || e.keyCode === 37) {
+                    var prev = parent.find('input#' + $(this).data('previous'));
+                    
+                    if(prev.length) {
+                        $(prev).select();
+                    }
+                } else if((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 96 && e.keyCode <= 105) || e.keyCode === 39) {
+                    var next = parent.find('input#' + $(this).data('next'));
+                    
+                    if(next.length) {
+                        $(next).select();
+                    } else {
+                        $('.digit-group').submit();
+                    }
+                }
+            });
+        });
+    </script>
+   
+    <script>
+        
+        $(".digit-group").on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: $(this).prop('method'),
+                url : "{% url 'otp' %}",
+                data: {
+                    'session_id':$("#session_id").val(),
+                    'otp_input':$('#digit-1').val() + $('#digit-2').val() + $('#digit-3').val() + $('#digit-4').val()+ $('#digit-5').val() + $('#digit-6').val(),
+                    'mobile_number': $('#mobile_number').val()
+                },
+                beforeSend: function(xhr) {
+                    $("#loading").show();
+                      
+                },
+                success: function(data) {
+                    $("#loading").attr("style", "display:none !important");
+                    window.location.href = "/"
+                },
+                error : function(data) {
+                    if (data.status == 400) {
+                        $("#loading").attr("style", "display:none !important");
+                        var msg = data.responseJSON
+                        //console.log(msg)
+                        if (msg.length!=0) {
+                            for(key in msg){
+                                var html = `<span id="${key}" class="text-danger text-center  text-sm-start" style="font-size: smaller;"> ${msg[key]} </span>`
+                                $("#error_msg").after( html )
+                                window.setTimeout(function() { $("span" + "#"+ key).css('display','none'); }, 3000);
+                                
+                            }
+                        
+                        }
+                    }
+                    else if (data.status == 401) {
+                        window.location.href = '/signin/'
+                    }
+                    
+                }
+
+            });
+        });
+    </script>
+
+    <script>
+        
+        $("#resend-otp").click(function(e) {
+            e.preventDefault();
+            let token = JSON.parse(localStorage.getItem('access_token'));
+            console.log(token)
+            $.ajax({
+                type:'GET',
+                cache: false,
+                url:"{% url 'verify' %}",
+                data:{
+                    'number':$('#mobile_number').val()
+                },
+                beforeSend: function(xhr) {
+                    //$("#loading").show();
+                    xhr.setRequestHeader('Authorization', `Bearer ${token}`);   
+                },
+                success: function(data, textStatus, xhr) {
+                    $("#loading").attr("style", "display:none !important");
+                    console.log('otp send successfully!')
+                    $('#session_id').attr('value',window.btoa(data['session_id']));
+                    $('#mobile_number').attr('value',data['mobile_number']);
+                    var html = `<span id="new-otp-send" class="text-danger text-center  text-sm-start" style="font-size: smaller;">New OTP Sent!</span>`
+                    $("#error_msg").after( html )
+                    window.setTimeout(function() { $("span" + "#new-otp-send").css('display','none'); }, 3000);
+                },
+                error : function(data, textStatus, xhr) {
+                    if (data.status == 400) {
+                        $("#loading").attr("style", "display:none !important");
+                        var msg = data.responseJSON
+                        //console.log(msg)
+                        if (msg.length!=0) {
+                            for(key in msg){
+                                var html = `<span id="${key}" class="text-danger text-center  text-sm-start" style="font-size: smaller;"> ${msg[key]} </span>`
+                                $("#error_msg").after( html )
+                                window.setTimeout(function() { $("span" + "#"+ key).css('display','none'); }, 3000);
+                                
+                            }
+                        
+                        }
+                    }
+                    else if (data.status == 401) {
+                        window.location.href = '/signin/'
+                       
+                    }
+                    
+                                    
+                }
+            });
+        });
+    </script>
+{% endblock  %}

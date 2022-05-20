@@ -1,0 +1,1046 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block navbarcss %}
+    <style>
+        
+        html,body {
+            overflow: hidden;
+        }
+
+        .scroll-custom {
+            overflow-y:scroll;
+            max-height: calc(100vh - 6rem) !important;
+        }
+        .chat-online {
+            color: #34ce57
+            }
+
+            .chat-offline {
+                color: #e4606d
+            }
+
+            .chat-messages {
+                display: flex;
+                flex-direction: column;
+                max-height: 800px;
+                
+                max-height: calc(100vh - 12rem) !important;
+            }
+
+            .chat-message-left,
+            .chat-message-right {
+                display: flex;
+                flex-shrink: 0
+            }
+
+            .chat-message-left {
+                margin-right: auto
+            }
+
+            .chat-message-right {
+                flex-direction: row-reverse;
+                margin-left: auto
+            }
+            .py-3 {
+                padding-top: 1rem!important;
+                padding-bottom: 1rem!important;
+            }
+            .px-4 {
+                padding-right: 1.5rem!important;
+                padding-left: 1.5rem!important;
+            }
+            .flex-grow-0 {
+                flex-grow: 0!important;
+            }
+            .border-top {
+                border-top: 1px solid #dee2e6!important;
+            }
+
+            .timeline {
+  list-style: none;
+  padding-left: 0;
+  position: relative;
+}
+.timeline:after {
+  content: "";
+  height: auto;
+  width: 1px;
+  background: #e3e3e3;
+  position: absolute;
+  top: 5px;
+  left: 30px;
+  bottom: 25px;
+}
+.timeline.timeline-sm:after {
+  left: 12px;
+}
+.timeline li {
+  position: relative;
+  padding-left: 70px;
+  margin-bottom: 20px;
+}
+.timeline li:after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #e3e3e3;
+  position: absolute;
+  left: 24px;
+  top: 5px;
+}
+.timeline li .timeline-date {
+  display: inline-block;
+  width: 100%;
+  color: #a6a6a6;
+  font-style: italic;
+  font-size: 13px;
+}
+.timeline.timeline-icons li {
+  padding-top: 7px;
+}
+.timeline.timeline-icons li:after {
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  left: 14px;
+  top: 0;
+  z-index: 11;
+}
+.timeline.timeline-icons li .timeline-icon {
+  position: absolute;
+  left: 23.5px;
+  top: 7px;
+  z-index: 12;
+}
+.timeline.timeline-icons li .timeline-icon [class*=glyphicon] {
+  top: -1px !important;
+}
+.timeline.timeline-icons.timeline-sm li {
+  padding-left: 40px;
+  margin-bottom: 10px;
+}
+.timeline.timeline-icons.timeline-sm li:after {
+  left: -5px;
+}
+.timeline.timeline-icons.timeline-sm li .timeline-icon {
+  left: 4.5px;
+}
+.timeline.timeline-advanced li {
+  padding-top: 0;
+}
+.timeline.timeline-advanced li:after {
+  background: #fff;
+  border: 1px solid #29b6d8;
+}
+.timeline.timeline-advanced li:before {
+  content: "";
+  width: 52px;
+  height: 52px;
+  border: 10px solid #fff;
+  position: absolute;
+  left: 4px;
+  top: -10px;
+  border-radius: 50%;
+  z-index: 12;
+}
+.timeline.timeline-advanced li .timeline-icon {
+  color: #29b6d8;
+}
+.timeline.timeline-advanced li .timeline-date {
+  width: 75px;
+  position: absolute;
+  right: 5px;
+  top: 3px;
+  text-align: right;
+}
+.timeline.timeline-advanced li .timeline-title {
+  font-size: 17px;
+  margin-bottom: 0;
+  padding-top: 5px;
+  font-weight: bold;
+}
+.timeline.timeline-advanced li .timeline-subtitle {
+  display: inline-block;
+  width: 100%;
+  color: #a6a6a6;
+}
+.timeline.timeline-advanced li .timeline-content {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-right: 70px;
+}
+.timeline.timeline-advanced li .timeline-content p {
+  margin-bottom: 3px;
+}
+.timeline.timeline-advanced li .timeline-content .divider-dashed {
+  padding-top: 0px;
+  margin-bottom: 7px;
+  width: 200px;
+}
+.timeline.timeline-advanced li .timeline-user {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.timeline.timeline-advanced li .timeline-user:before,
+.timeline.timeline-advanced li .timeline-user:after {
+  content: " ";
+  display: table;
+}
+.timeline.timeline-advanced li .timeline-user:after {
+  clear: both;
+}
+.timeline.timeline-advanced li .timeline-user .timeline-avatar {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  float: left;
+  margin-right: 10px;
+}
+.timeline.timeline-advanced li .timeline-user .timeline-user-name {
+  font-weight: bold;
+  margin-bottom: 0;
+}
+.timeline.timeline-advanced li .timeline-user .timeline-user-subtitle {
+  color: #a6a6a6;
+  margin-top: -4px;
+  margin-bottom: 0;
+}
+.timeline.timeline-advanced li .timeline-link {
+  margin-left: 5px;
+  display: inline-block;
+}
+.timeline-load-more-btn {
+  margin-left: 70px;
+}
+.timeline-load-more-btn i {
+  margin-right: 5px;
+}
+
+
+/* -----------------------------------------
+   Dropdown
+----------------------------------------- */
+.dropdown-menu{
+    padding:0 0 0 0;
+}
+a.dropdown-menu-header {
+    background: #f7f9fe;
+    font-weight: bold;
+    border-bottom: 1px solid #e3e3e3;
+}
+.dropdown-menu > li a {
+    padding: 10px 20px;
+}
+
+/* -----------------------------------------
+   Badge
+----------------------------------------- */
+
+.badge{
+    padding: 3px 5px 2px;
+    position: absolute;
+    top: 8px;
+    right: 5px;
+    display: inline-block;
+    min-width: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #ffffff;
+    line-height: 1;
+    vertical-align: baseline;
+    white-space: nowrap;
+    text-align: center;
+    border-radius: 10px;
+}
+.badge-danger {
+    background-color: #db5565;
+}
+
+    .findfriend::-webkit-calendar-picker-indicator {
+        display:none !important;
+        }
+
+        @media (max-width:680px)
+            {
+               .custom-height-scroll {
+                overflow-y: scroll !important; 
+                max-height: 50vh;
+               }
+            }
+
+        .card-img-top-custom{
+            width: 100%;
+            height: 30vh;
+            object-fit: contain;
+        }
+    </style>
+
+    
+{% endblock %}
+
+
+
+{% block navbar %}
+
+    <header class="py-3 mb-3 border-bottom">
+        
+        <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 2fr;">
+            <div class="dropdown">
+                <img class="logo" alt="Logo">
+                
+            </div>
+
+        <div class="d-flex align-items-center">
+            <form class="w-100 me-3" method="POST">
+                {% csrf_token %}
+                <input type="search" list="searchfriend"  id="searchingfriend" name="searchvalue" autocomplete="off" class="findfriend form-control" placeholder="Search..." aria-label="Search">
+            </form>
+            
+            <a id="see-friend-request" class="position-relative me-4 see-friend-request" id="dropdownMenu2"  aria-expanded="false">
+                    
+                <i class="bi bi-people-fill"></i>
+                
+            </a>
+            
+            <!--<div class="flex-shrink-0 dropdown">
+                <a href="#"   class="position-relative me-4" data-bs-toggle="dropdown" id="dropdownMenu1"  aria-expanded="false">
+                    <span class="badge badge-danger">6</span>
+                    <i class="bi bi-bell-fill"></i>
+                    
+                </a>
+                <ul class="dropdown-menu dropdown-menu-left pull-right" role="menu" aria-labelledby="dropdownMenu1">
+                    <ul class="timeline timeline-icons timeline-sm" style="margin:10px;width:210px">
+                        
+                                                    <li>
+                                                        <p>
+                                                            Your “Volume Trendline” PDF is ready <a href="">here</a>
+                                                            <span class="timeline-icon"><i class="fa fa-file-pdf-o" style="color:red"></i></span>
+                                                            <span class="timeline-date">Dec 10, 22:00</span>
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            Your “Marketplace Report” PDF is ready <a href="">here</a>
+                                                            <span class="timeline-icon"><i class="fa fa-file-pdf-o"  style="color:red"></i></span>
+                                                            <span class="timeline-date">Dec 6, 10:17</span>
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            Your “Top Words” spreadsheet is ready <a href="">here</a>
+                                                            <span class="timeline-icon"><i class="fa fa-file-excel-o"  style="color:green"></i></span>
+                                                            <span class="timeline-date">Dec 5, 04:36</span>
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            Your “Top Words” spreadsheet is ready <a href="">here</a>
+                                                            <span class="timeline-icon"><i class="fa fa-file-excel-o"  style="color:green"></i></span>
+                                                            <span class="timeline-date">Dec 5, 04:36</span>
+                                                        </p>
+                                                    </li>
+                                                    <li>
+                                                        <p>
+                                                            Your “Top Words” spreadsheet is ready <a href="">here</a>
+                                                            <span class="timeline-icon"><i class="fa fa-file-excel-o"  style="color:green"></i></span>
+                                                            <span class="timeline-date">Dec 5, 04:36</span>
+                                                        </p>
+                                                    </li>
+                                                </ul>
+                    
+                </ul>
+		        
+            </div>-->
+            
+
+            <div class="flex-shrink-0 dropdown">
+                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://www.gravatar.com/avatar/?d=mp&s=80x80" alt="mdo" width="32" height="32" class="rounded-circle">
+                </a>
+                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Sign out</a></li>
+                </ul>
+            </div>
+        </div>
+        </div>
+    </header>    
+{% endblock %}
+
+
+{% block people %}
+    
+    <div id="peoples" class="container-fluid">
+        <div class="row flex-nowrap">
+            <div class="col-auto px-0">
+                <div id="sidebar" class="collapse collapse-horizontal show border-end scroll-custom">
+                    <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
+                    </div>
+                </div>
+            </div>
+            <main class="col ps-md-2 pt-2">
+                <a href="#" data-bs-target="#sidebar" data-bs-toggle="collapse" class="border rounded-3 p-1 text-decoration-none"><i class="bi bi-list bi-lg py-2 p-1"></i> My Friends</a>
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <!-- when people is talking for the first show this-->
+                            <div class="chat-messages p-2">
+                                <p class="text-center">Say Hi!</p>
+                            </div>
+
+                            <!-- make chat-messages overflow-y: scroll; scrollable only when count is > 4-->
+                            <!--<div class="chat-messages p-2">
+        
+                                <div class="chat-message-right p-3">
+                                    <div>
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
+                                        <div class="text-muted small text-nowrap mt-2">2:33 am</div>
+                                    </div>
+                                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                        <div class="font-weight-bold mb-1">You</div>
+                                        Lorem ipsum dolor sit amet, vis erat denique in, dicunt prodesset te vix.
+                                    </div>
+                                </div>
+
+                                <div class="chat-message-left p-3">
+                                    <div>
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                                        <div class="text-muted small text-nowrap mt-2">2:34 am</div>
+                                    </div>
+                                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                                        <div class="font-weight-bold mb-1">Sharon Lessman</div>
+                                        Sit meis deleniti eu, pri vidit meliore docendi ut, an eum erat animal commodo.
+                                    </div>
+                                </div>
+
+                                <div class="chat-message-right p-3">
+                                    <div>
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
+                                        <div class="text-muted small text-nowrap mt-2">2:35 am</div>
+                                    </div>
+                                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                        <div class="font-weight-bold mb-1">You</div>
+                                        Cum ea graeci tractatos.
+                                    </div>
+                                </div>
+
+                                <div class="chat-message-left p-3">
+                                    <div>
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                                        <div class="text-muted small text-nowrap mt-2">2:36 am</div>
+                                    </div>
+                                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                                        <div class="font-weight-bold mb-1">Sharon Lessman</div>
+                                        Sed pulvinar, massa vitae interdum pulvinar, risus lectus porttitor magna, vitae commodo lectus mauris et velit.
+                                        Proin ultricies placerat imperdiet. Morbi varius quam ac venenatis tempus.
+                                    </div>
+                                </div>
+
+                                <div class="chat-message-left p-3">
+                                    <div>
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                                        <div class="text-muted small text-nowrap mt-2">2:37 am</div>
+                                    </div>
+                                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                                        <div class="font-weight-bold mb-1">Sharon Lessman</div>
+                                        Cras pulvinar, sapien id vehicula aliquet, diam velit elementum orci.
+                                    </div>
+                                </div>
+
+                                <div class="chat-message-right p-3">
+                                    <div>
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
+                                        <div class="text-muted small text-nowrap mt-2">2:38 am</div>
+                                    </div>
+                                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                        <div class="font-weight-bold mb-1">You</div>
+                                        Lorem ipsum dolor sit amet, vis erat denique in, dicunt prodesset te vix.
+                                    </div>
+                                </div>
+
+                                <div class="chat-message-left p-3">
+                                    <div>
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                                        <div class="text-muted small text-nowrap mt-2">2:39 am</div>
+                                    </div>
+                                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                                        <div class="font-weight-bold mb-1">Sharon Lessman</div>
+                                        Sit meis deleniti eu, pri vidit meliore docendi ut, an eum erat animal commodo.
+                                    </div>
+                                </div>
+
+                                <div class="chat-message-right p-3">
+                                    <div>
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
+                                        <div class="text-muted small text-nowrap mt-2">2:40 am</div>
+                                    </div>
+                                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                        <div class="font-weight-bold mb-1">You</div>
+                                        Cum ea graeci tractatos.
+                                    </div>
+                                </div>
+
+                                <div class="chat-message-right p-3">
+                                    <div>
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
+                                        <div class="text-muted small text-nowrap mt-2">2:41 am</div>
+                                    </div>
+                                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                        <div class="font-weight-bold mb-1">You</div>
+                                        Morbi finibus, lorem id placerat ullamcorper, nunc enim ultrices massa, id dignissim metus urna eget purus.
+                                    </div>
+                                </div>
+
+                                <div class="chat-message-left p-3">
+                                    <div>
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                                        <div class="text-muted small text-nowrap mt-2">2:42 am</div>
+                                    </div>
+                                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                                        <div class="font-weight-bold mb-1">Sharon Lessman</div>
+                                        Sed pulvinar, massa vitae interdum pulvinar, risus lectus porttitor magna, vitae commodo lectus mauris et velit.
+                                        Proin ultricies placerat imperdiet. Morbi varius quam ac venenatis tempus.
+                                    </div>
+                                </div>
+
+                                <div class="chat-message-right p-3">
+                                    <div>
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
+                                        <div class="text-muted small text-nowrap mt-2">2:43 am</div>
+                                    </div>
+                                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                        <div class="font-weight-bold mb-1">You</div>
+                                        Lorem ipsum dolor sit amet, vis erat denique in, dicunt prodesset te vix.
+                                    </div>
+                                </div>
+
+                                <div class="chat-message-left p-3">
+                                    <div>
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                                        <div class="text-muted small text-nowrap mt-2">2:44 am</div>
+                                    </div>
+                                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                                        <div class="font-weight-bold mb-1">Sharon Lessman</div>
+                                        Sit meis deleniti eu, pri vidit meliore docendi ut, an eum erat animal commodo.
+                                    </div>
+                                </div>
+                                
+                            </div>-->
+                            
+                                
+                            
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Type your message">
+                                <button class="btn btn-primary">Send</button>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+
+    
+    
+
+
+{% endblock %}
+
+
+{% block mainjs %}
+
+    <script>
+        //var dict = {}
+        $(document).ready( function() {
+            let token = JSON.parse(localStorage.getItem('access_token'));
+            $.ajax({
+                type: "GET", 
+                url: "{% url 'people' %}",
+                beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', `Bearer ${token}`);   
+                },
+                success: function(data, textStatus, xhr) { 
+
+                    //window.location.href = `Home/${data['code']}/` 
+                    //for(key in data){
+                    //dict[key] = data[key]
+                    //}
+                    //console.log(dict);
+                    //console.log(data);
+                    
+                },
+                error: function(data,xhr, ajaxOptions, thrownError) { 
+                    //console.log(data);
+                    if (data.status == 401) {
+                        window.location.href = '/signin/'
+                    }
+                }
+            });
+        });
+    </script>
+
+    
+    <script type="application/javascript" >
+            $(document).ready(function(){
+                let token = JSON.parse(localStorage.getItem('access_token'));
+                $("#searchingfriend").keyup(function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                    type: "POST",
+                    url: "{% url 'findpeople' %}",
+                    data: {
+                        searchvalue: $('input[name="searchvalue"]').val(),
+                    },
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                        $('#peoples').html('')   
+                    },
+                    success: function(data,xhr, ajaxOptions, thrownError) {
+                        //$("#curr_people").html(data);
+                        //$('#curr_people').addClass('custom-height-scroll')
+                        //console.log(data);
+                        $('#peoples').html('')  
+                        var curr_sender = data['sender'] 
+                        var main_ele = $("#peoples")[0]
+                        var row_ele =  `
+                            <div class="row people justify-content-center row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 ">
+                            `
+                        main_ele.innerHTML+=row_ele
+                        var wrapper = $('#peoples .people')[0] 
+                        if (data['users_found']){
+                            //console.log(data)
+                            for ( i in data['users']) {
+                                //console.log(data['users'][i])
+                                var element = `
+                                    <div class="col mt-4">
+                                        <form id="friendform" method="post">
+                                            {% csrf_token %}
+                                            <div id="${data['users'][i]['user']['username']}" class="card">
+                                                <img src="https://www.gravatar.com/avatar/?d=mp&s=80x80" class="card-img-top-custom" alt="Sharon Lessman" >
+                                                <div class="card-body people-card">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                `
+                                wrapper.innerHTML+=element
+                                var element_title = $('#'+data['users'][i]['user']['username'] +' .people-card')[0]
+                                if (!data['users'][i]['middle_name']){
+                                    var card_title = `<h5 class="card-title text-center">${data['users'][i]['user']['first_name']} ${data['users'][i]['user']['last_name']}</h5>`
+                                   
+                                }
+                                else {
+                                    var card_title = `<h5 class="card-title text-center">${data['users'][i]['user']['first_name']} ${data['users'][i]['middle_name']} ${data['users'][i]['user']['last_name']}</h5>`
+                                }
+                                var btn = `<div class="flex text-center">
+                                                                            <button id="add_friend_${data['users'][i]['user']['username']}" type="submit"  data-action="add-friend"  data-receiver-name="${data['users'][i]['user']['username']}" data-sender-name="${curr_sender}" class="btn addfriend btn-primary btn-sm">Add Friend</button>
+                                                                            <button id="remove_friend_${data['users'][i]['user']['username']}" type="submit" data-action="remove-friend"  data-receiver-name="${data['users'][i]['user']['username']}" data-sender-name="${curr_sender}"  class="btn removefriend btn-secondary btn-sm">Remove</button>        
+                                                                        </div>`
+                                element_title.innerHTML+=card_title
+                                element_title.innerHTML+=btn
+                            }
+                            /*if any friends request sent by the current logged in user to users*/
+                            if (data['anyfriendrequests']) {
+                                for (i in data['friendrequests']){
+                                    //console.log(data['friendrequests'][i])
+                                    if (data['friendrequests'][i]['status'] == true){
+                                        var curr_ele = $('#'+data['friendrequests'][i]['receiver']['username']+' .people-card .card-title')
+                                        if (curr_ele){
+                                            curr_ele.nextAll('div').remove();
+                                            var cancelbutton =  `
+                                            <div class="d-grid gap-2 col-6 mx-auto">    
+                                                <button id="cancel_friend_${data['friendrequests'][i]['receiver']['username']}" type="submit" data-action="cancel-friend-request"  data-receiver-name="${data['friendrequests'][i]['receiver']['username']}" data-sender-name="${curr_sender}"  class="btn cancelfriend btn-secondary">Cancel Request</button>
+                                            </div>`
+                                            curr_ele[0].innerHTML+=cancelbutton
+                                        }
+                                    }
+                                }
+                            }
+
+                            /*if current user have friends*/
+                            if (data['have_friends']){
+                                for ( i in data['have_friends']['friends']){
+                                    let curr_ele = $('#'+data['have_friends']['friends'][i]['username']+' .people-card .card-title')
+                                    //console.log(curr_ele)
+                                    if (curr_ele){
+                                            curr_ele.nextAll('div').remove();
+                                            var unfriendbutton =  `
+                                            <div class="d-grid gap-2 col-6 mx-auto">    
+                                                                    <button id="un_friend_${data['have_friends']['friends'][i]['username']}" type="submit" data-action="un-friend"  data-receiver-name="${data['have_friends']['friends'][i]['username']}" data-sender-name="${curr_sender}"  class="btn cancelfriend btn-secondary">Unfriend</button>
+                                                                </div>`
+                                            curr_ele[0].innerHTML+=unfriendbutton
+                                    }
+                                }
+
+                            }
+                            
+                        }
+                    },
+                    error: function(data,xhr, ajaxOptions, thrownError) { 
+                        console.log(data);
+                        
+                    }
+                    });
+                });
+            });
+    </script>
+    
+    
+    <script type="application/javascript" >
+        $(document).ready(function(){
+            let token = JSON.parse(localStorage.getItem('access_token'));
+            $('body').on("submit", "#friendform", function(e) {
+                e.preventDefault();
+                
+                let action = $(document.activeElement).attr('data-action')
+                let sender_name = $(document.activeElement).attr('data-sender-name')
+                let receiver_name = $(document.activeElement).attr('data-receiver-name')
+                
+                $.ajax({
+                    type: "POST",
+                    url:"{% url 'friendrequest' %}",
+                    data:{
+                        action:action,
+                        sender_name:sender_name,
+                        receiver_name:receiver_name,
+                    },
+                    beforeSend: function(xhr, settings){
+                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                    },
+                    success: function(data,xhr, ajaxOptions, thrownError) {
+                        //console.log(data);
+                        let parent_ele = $("#"+data['receiver_name'])
+                        let child_ele = parent_ele.children('.people-card')
+                        child_ele.html('')
+                        if (data['action'] == "add-friend") {
+                            
+                            var msg = `<p id="${data['receiver_name']}" class="text-danger message text-sm-start" style="font-size: smaller; text-align: center!important;"> ${data['message']} </p>`
+                            
+                            if (!data['middle_name']) {
+                                //var title_ele = `<h5 class="card-title text-center">${data['first_name']} ${data['last_name']}</h5> `
+                                var div_cancelbutton =  `
+                                    <h5 class="card-title p-2 text-center">${data['first_name']} ${data['last_name']}</h5>
+                                    <div class="d-grid gap-2 col-6 mx-auto">   
+                                        <button id="cancel_friend_${data['receiver_name']}" type="submit" data-action="cancel-friend-request"  data-receiver-name="${data['receiver_name']}" data-sender-name="${data['sender_name']}"  class="btn cancelfriend btn-secondary">Cancel Request</button>
+                                    </div>
+                                `
+                            }
+                            else {
+                                //var title_ele = `<h5 class="card-title text-center">${data['first_name']} ${data['middle_name']} ${data['last_name']}</h5>` 
+                                var div_cancelbutton =  `
+                                    <h5 class="card-title p-2 text-center">${data['first_name']} ${data['middle_name']} ${data['last_name']}</h5>
+                                    <div class="d-grid gap-2 col-6 mx-auto">
+                                          
+                                        <button id="cancel_friend_${data['receiver_name']}" type="submit" data-action="cancel-friend-request"  data-receiver-name="${data['receiver_name']}" data-sender-name="${data['sender_name']}"  class="btn cancelfriend btn-secondary">Cancel Request</button>
+                                    </div>
+                                `
+
+                            }
+                            
+                           //child_ele[0].innerHTML+=title_ele
+                           child_ele[0].innerHTML+=msg
+                           child_ele[0].innerHTML+=div_cancelbutton
+                           
+                          
+                           
+                           window.setTimeout(function() { $("p" + "#"+ data['receiver_name']+".message").css('display','none'); }, 3000);
+                            
+                        }
+                        if (data['action'] == "cancel-friend-request") {
+                            
+                            var msg = `<p id="${data['receiver_name']}" class="text-danger message  text-sm-start" style="font-size: smaller; text-align: center!important;"> ${data['message']} </p>`
+                            
+                            if (!data['middle_name']) {
+                                //var title_ele = `<h5 class="card-title text-center">${data['first_name']} ${data['last_name']}</h5>`
+                                var div_add_cancel_button = 
+                                    `
+                                        <h5 class="card-title p-2  text-center">${data['first_name']} ${data['last_name']}</h5>
+                                        <div class="flex text-center">
+                                            
+                                            <button id="add_friend_${data['receiver_name']}" type="submit"  data-action="add-friend"  data-receiver-name="${data['receiver_name']}" data-sender-name="${data['sender_name']}" class="btn addfriend btn-primary btn-sm">Add Friend</button>
+                                            <button id="remove_friend_${data['receiver_name']}" type="submit" data-action="remove-friend"  data-receiver-name="${data['receiver_name']}" data-sender-name="${data['sender_name']}"  class="btn removefriend btn-secondary btn-sm">Remove</button>        
+                                        </div>
+                                    `
+                            }
+                            else {
+                                //var title_ele = <h5 class="card-title text-center">${data['first_name']} ${data['middle_name']} ${data['last_name']}</h5>
+                                var div_add_cancel_button = 
+                                    `   
+                                        <h5 class="card-title p-2 text-center">${data['first_name']} ${data['middle_name']} ${data['last_name']}</h5>
+                                        <div class="flex text-center">
+                                            
+                                            <button id="add_friend_${data['receiver_name']}" type="submit"  data-action="add-friend"  data-receiver-name="${data['receiver_name']}" data-sender-name="${data['sender_name']}" class="btn addfriend btn-primary btn-sm">Add Friend</button>
+                                            <button id="remove_friend_${data['receiver_name']}" type="submit" data-action="remove-friend"  data-receiver-name="${data['receiver_name']}" data-sender-name="${data['sender_name']}"  class="btn removefriend btn-secondary btn-sm">Remove</button>        
+                                        </div>
+                                    `
+                            }
+                            //child_ele[0].innerHTML+=title_ele
+                            child_ele[0].innerHTML+=msg
+                            child_ele[0].innerHTML+=div_add_cancel_button
+                            window.setTimeout(function() { $("p" + "#"+  data['receiver_name'] +".message").css('display','none'); }, 3000);
+                        }
+                        if (data['action'] == "un-friend"){
+                            var msg = `<p id="${data['receiver_name']}" class="text-danger message  text-sm-start" style="font-size: smaller; text-align: center!important;"> ${data['message']} </p>`
+                            
+                            
+                            if (!data['middle_name']) {
+                                //var title_ele = `<h5 class="card-title text-center">${data['first_name']} ${data['last_name']}</h5>`
+                                var div_add_cancel_button = 
+                                    `
+                                        <h5 class="card-title p-2 text-center">${data['first_name']} ${data['last_name']}</h5>
+                                        <div class="flex text-center">
+                                            
+                                            <button id="add_friend_${data['receiver_name']}" type="submit"  data-action="add-friend"  data-receiver-name="${data['receiver_name']}" data-sender-name="${data['sender_name']}" class="btn addfriend btn-primary btn-sm">Add Friend</button>
+                                            <button id="remove_friend_${data['receiver_name']}" type="submit" data-action="remove-friend"  data-receiver-name="${data['receiver_name']}" data-sender-name="${data['sender_name']}"  class="btn removefriend btn-secondary btn-sm">Remove</button>        
+                                        </div>
+                                    `
+                            }
+                            else {
+                                //var title_ele = `<h5 class="card-title text-center">${data['first_name']} ${data['middle_name']} ${data['last_name']}</h5>`
+                                var div_add_cancel_button = 
+                                    `   
+                                        <h5 class="card-title p-2 text-center">${data['first_name']} ${data['middle_name']} ${data['last_name']}</h5>
+                                        <div class="flex text-center">
+                                            
+                                            <button id="add_friend_${data['receiver_name']}" type="submit"  data-action="add-friend"  data-receiver-name="${data['receiver_name']}" data-sender-name="${data['sender_name']}" class="btn addfriend btn-primary btn-sm">Add Friend</button>
+                                            <button id="remove_friend_${data['receiver_name']}" type="submit" data-action="remove-friend"  data-receiver-name="${data['receiver_name']}" data-sender-name="${data['sender_name']}"  class="btn removefriend btn-secondary btn-sm">Remove</button>        
+                                        </div>
+                                    `
+                            }
+                            //child_ele[0].innerHTML+=title_ele
+                            child_ele[0].innerHTML+=msg
+                            child_ele[0].innerHTML+=div_add_cancel_button
+                            window.setTimeout(function() { $("p" + "#"+  data['receiver_name'] +".message").css('display','none'); }, 3000);
+                        }
+                        if (data['action'] == "accpet-request") {
+                            $('#peoples').html('')  
+                            var main_ele = $("#peoples")[0]
+                            var row_ele =  `
+                                <div class="row people justify-content-center row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 ">
+                                `
+                            main_ele.innerHTML+=row_ele
+                            var wrapper = $('#peoples .people')[0] 
+                            if (data['anyrequests'] == true ) {
+                                for (i in data['usersrequests']) {
+                                    //console.log(data['usersrequests'][i])
+                                    
+                                        if (data['usersrequests'][i]['status'] == true ) { 
+                                            var element = `
+                                                    <div class="col mt-4">
+                                                        <form id="friendform" method="post">
+                                                            {% csrf_token %}
+                                                            <div id="${data['usersrequests'][i]['sender']['username']}" class="card">
+                                                                <img src="https://www.gravatar.com/avatar/?d=mp&s=80x80" class="card-img-top-custom" alt="Sharon Lessman" >
+                                                                <div class="card-body people-card">
+                                                                    <h5 class="card-title p-2 text-center">${data['usersrequests'][i]['sender']['first_name']} ${data['usersrequests'][i]['sender']['last_name']}</h5>
+                                                                    <div class="flex text-center">
+                                                                        
+                                                                        <button id="accept_friend_${data['usersrequests'][i]['sender']['username']}" type="submit"  data-action="accpet-request"  data-receiver-name="${data['usersrequests'][i]['receiver']['username']}" data-sender-name="${data['usersrequests'][i]['sender']['username']}" class="btn addfriend btn-primary btn-sm">Accept</button>
+                                                                        <button id="delete_friend_${data['usersrequests'][i]['sender']['username']}" type="submit" data-action="delete-request"  data-receiver-name="${data['usersrequests'][i]['receiver']['username']}" data-sender-name="${data['usersrequests'][i]['sender']['username']}"  class="btn removefriend btn-secondary btn-sm">Delete</button>        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                `
+                                            wrapper.innerHTML+=element
+                                        }
+                                    
+
+                                }
+                            }
+                            else {
+                                wrapper.innerHTML = 'No New Friend Requests!'
+                            }
+
+                        }
+                        if (data['action'] == "delete-request") {
+                            $('#peoples').html('')  
+                            var main_ele = $("#peoples")[0]
+                            var row_ele =  `
+                                <div class="row people justify-content-center row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 ">
+                                `
+                            main_ele.innerHTML+=row_ele
+                            var wrapper = $('#peoples .people')[0] 
+                            if (data['anyrequests'] == true ) {
+                                for (i in data['usersrequests']) {
+                                    //console.log(data['usersrequests'][i])
+                                    
+                                        if (data['usersrequests'][i]['status'] == true ) { 
+                                            var element = `
+                                                    <div class="col mt-4">
+                                                        <form id="friendform" method="post">
+                                                            {% csrf_token %}
+                                                            <div id="${data['usersrequests'][i]['sender']['username']}" class="card">
+                                                                <img src="https://www.gravatar.com/avatar/?d=mp&s=80x80" class="card-img-top-custom" alt="Sharon Lessman" >
+                                                                <div class="card-body people-card">
+                                                                    <h5 class="card-title p-2 text-center">${data['usersrequests'][i]['sender']['first_name']} ${data['usersrequests'][i]['sender']['last_name']}</h5>
+                                                                    <div class="flex text-center">
+                                                                        
+                                                                        <button id="accept_friend_${data['usersrequests'][i]['sender']['username']}" type="submit"  data-action="accpet-request"  data-receiver-name="${data['usersrequests'][i]['receiver']['username']}" data-sender-name="${data['usersrequests'][i]['sender']['username']}" class="btn addfriend btn-primary btn-sm">Accept</button>
+                                                                        <button id="delete_friend_${data['usersrequests'][i]['sender']['username']}" type="submit" data-action="delete-request"  data-receiver-name="${data['usersrequests'][i]['receiver']['username']}" data-sender-name="${data['usersrequests'][i]['sender']['username']}"  class="btn removefriend btn-secondary btn-sm">Delete</button>        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                `
+                                            wrapper.innerHTML+=element
+                                        }
+                                    
+
+                                }
+                            }
+                            else {
+                                wrapper.innerHTML = 'No New Friend Requests!'
+                            }
+                        }
+                        
+                    },
+                    error: function(data,xhr, ajaxOptions, thrownError) { 
+                        console.log(data);
+                        
+                    }
+                });
+        });
+    });
+
+    </script>
+
+    <script>
+        $('#see-friend-request').click(function(event) {
+            let token = JSON.parse(localStorage.getItem('access_token'));
+            $.ajax({
+                    type: "post",
+                    url:"{% url 'usersrequests' %}",
+                    beforeSend: function(xhr, settings){
+                        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                    },
+                    success: function(data,xhr, ajaxOptions, thrownError) {
+                        $('#peoples').html('')  
+                        var curr_sender = data['sender'] 
+                        var main_ele = $("#peoples")[0]
+                        var row_ele =  `
+                            <div class="row people justify-content-center row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 ">
+                            `
+                        main_ele.innerHTML+=row_ele
+                        var wrapper = $('#peoples .people')[0] 
+                        //console.log(data);
+                        if (data['anyrequests'] == true ) {
+                            for (i in data['usersrequests']) {
+                                //console.log(data['usersrequests'][i])
+                                if (data['usersrequests'][i]['status'] == true ) { 
+                                    var element = `
+                                            <div class="col mt-4">
+                                                <form id="friendform" method="post">
+                                                    {% csrf_token %}
+                                                    <div id="${data['usersrequests'][i]['sender']['username']}" class="card">
+                                                        <img src="https://www.gravatar.com/avatar/?d=mp&s=80x80" class="card-img-top-custom" alt="Sharon Lessman" >
+                                                        <div class="card-body people-card">
+                                                            <h5 class="card-title p-2 text-center">${data['usersrequests'][i]['sender']['first_name']} ${data['usersrequests'][i]['sender']['last_name']}</h5>
+                                                            <div class="flex text-center">
+                                                                
+                                                                <button id="accept_friend_${data['usersrequests'][i]['sender']['username']}" type="submit"  data-action="accpet-request"  data-receiver-name="${data['usersrequests'][i]['receiver']['username']}" data-sender-name="${data['usersrequests'][i]['sender']['username']}" class="btn addfriend btn-primary btn-sm">Accept</button>
+                                                                <button id="delete_friend_${data['usersrequests'][i]['sender']['username']}" type="submit" data-action="delete-request"  data-receiver-name="${data['usersrequests'][i]['receiver']['username']}" data-sender-name="${data['usersrequests'][i]['sender']['username']}"  class="btn removefriend btn-secondary btn-sm">Delete</button>        
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        `
+                                    wrapper.innerHTML+=element
+                                    }
+
+                            }
+                        }
+                        else {
+                            //console.log('1')
+                            wrapper.innerHTML+='No New friend Requests!'
+                        }
+                    },
+                    error: function(data,xhr, ajaxOptions, thrownError) { 
+                        console.log(data);
+                        
+                    }
+                });
+        });
+    </script>
+
+    <script>
+        $(document).ready( function() {
+                    let token = JSON.parse(localStorage.getItem('access_token'));
+                    $.ajax({
+                        type: "GET", 
+                        url: "{% url 'getuserfriends' %}",
+                        beforeSend: function(xhr) {
+                            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                            $('#sidebar #sidebar-nav').html('')   
+                        },
+                        success: function(data, textStatus, xhr) { 
+                            if (data['havefriends'] == true) {
+                                for ( i in data['usersrequests']['friends']){
+                                    var curr_user_friends = `
+                                    <a href="#" class="list-group-item users-friends list-group-item-action border-0">
+                                        <div id="${data['usersrequests']['friends'][i]['username']}" class="d-flex align-items-start">
+                                            <img src="https://www.gravatar.com/avatar/?d=mp&s=80x80" class="rounded-circle mr-1" alt="${data['usersrequests']['friends'][i]['first_name']} ${data['usersrequests']['friends'][i]['last_name']}" width="40" height="40">
+                                            <div class="flex-grow-1 ml-3">
+                                                ${data['usersrequests']['friends'][i]['first_name']} ${data['usersrequests']['friends'][i]['last_name']}
+                                                <div class="small"><span class="fas fa-circle chat-online"></span> Online</div>
+                                            </div>
+                                        </div>
+                                    </a>`
+                                    $('#sidebar #sidebar-nav')[0].innerHTML+=curr_user_friends
+                                }
+                            }
+                            else {
+                                $('#sidebar').removeClass('scroll-custom')
+                                $('#sidebar #sidebar-nav')[0].innerHTML = 'No Friends!'
+                            }
+                        },
+                        error: function(data,xhr, ajaxOptions, thrownError) { 
+                            //console.log(data);
+                            if (data.status == 401) {
+                                window.location.href = '/signin/'
+                            }
+                        }
+                    });
+                });
+
+    </script>
+    <script>
+            let token = JSON.parse(localStorage.getItem('access_token'));
+            //document.cookie = `Authorization=Bearer ${token}; SameSite=Strict`;
+            if (location.protocol == 'https'){
+                wsStart = 'wss://'
+            }
+            else {
+                wsStart = 'ws://'
+            }
+            let endPoint = wsStart + window.location.host + window.location.pathname + 'chat' 
+            //console.log(endPoint)
+            var socket = new WebSocket(endPoint+ "?token=" + token)
+            socket.onopen = function (e) {
+                console.log('connected');
+                //socket.send(JSON.stringify(msg));
+            }
+            socket.onmessage = function (e) {
+                console.log(e);
+            }
+            socket.onerror = function (e) {
+                console.error(e);
+            }
+            socket.onclose = function (e) {
+                console.error(e);
+            }
+    </script>
+    
+
+{% endblock %}
+
